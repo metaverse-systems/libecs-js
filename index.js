@@ -1,0 +1,3 @@
+require('./Component')
+
+exports.ECS = {};
