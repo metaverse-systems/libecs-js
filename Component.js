@@ -1,23 +1,25 @@
 const uuidv4 = require('uuid/v4');
 
-class Component
+function Component(handle)
 {
-    constructor(handle)
-    {
-        if(handle === undefined) handle = UUID.generate();
-        this.handle = handle;
-        this.type = "";
-    }
+    if(handle === undefined) handle = uuidv4();
+    this.handle = handle;
+    this.type = "";
 
-    import(data)
+    this.import = function(data)
     {
         throw new Error('import() method not implemented');
     }
 
-    export()
+    this.export = function()
     {
         throw new Error('export() method not implemented');
     }
+
+    this.set_type = function(type)
+    {
+        this.type = type;
+    }
 }
 
-export default Component
+module.exports = Component
