@@ -2,31 +2,31 @@ var Container = require('./Container')
 
 function Manager() 
 {
-    var containers = [];
+    var Containers = [];
 
-    var container_create = function(handle)
+    var ContainerCreate = function(handle)
     {
         var c = new Container(handle);
-        containers[c.handle] = c;
+        Containers[c.Handle] = c;
 
-        c.interval = setInterval(function() { c.update() }, 50);
-        return containers[c.handle];
+        c.interval = setInterval(function() { c.Update() }, 50);
+        return Containers[c.Handle];
     }
 
-    this.container = function(handle)
+    this.Container = function(handle)
     {
         if(handle !== undefined)
         {
             if(containers[handle] !== undefined) return containers[handle];
-            return container_create(handle);
+            return ContainerCreate(handle);
         }
 
-        return container_create();
+        return ContainerCreate();
     }
 
-    this.containers_get = function()
+    this.ContainersGet = function()
     {
-        return containers;
+        return Containers;
     }
 }
 

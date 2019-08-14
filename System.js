@@ -1,22 +1,15 @@
-const uuidv4 = require('uuid/v4');
-
 function System()
 {
-    this.id = uuidv4();
+    this.Handle = null;
 
-    this.get_type = function()
+    this.HandleGet = function()
     {
-        return this.type;
+        return this.Handle;
     }
 
-    this.set_container = function(container)
+    this.ContainerSet = function(container)
     {
-        this.container = container;
-    }
-
-    this.set_type = function(type)
-    {
-        this.type = type;
+        this.Container = container;
     }
 }
 

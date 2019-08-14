@@ -1,24 +1,21 @@
 const uuidv4 = require('uuid/v4');
 
-function Component(handle)
+function Component(config)
 {
-    if(handle === undefined) handle = uuidv4();
-    this.handle = handle;
-    this.type = "";
+    this.Handle = uuidv4();
+    this.EntityHandle = null;
 
-    this.import = function(data)
+    if(config)
     {
-        throw new Error('import() method not implemented');
+        var json = JSON.parse(config);
+        this.Data = json.Data;
     }
 
-    this.export = function()
+    this.save = function()
     {
-        throw new Error('export() method not implemented');
-    }
-
-    this.set_type = function(type)
-    {
-        this.type = type;
+        var output = {};
+        output.Data = this.Data;
+        return JSON.stringify(output);
     }
 }
 

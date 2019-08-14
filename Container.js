@@ -2,42 +2,40 @@ var Entity = require('./Entity.js')
 
 const uuidv4 = require('uuid/v4');
 
-function Container(handle)
+function Container()
 {
     var self = this;
 
-    if(handle === undefined) handle = uuidv4();
-    this.handle = handle;
-    this.entities = {};
-    this.systems = {};
-    this.components = {};
+    this.Handle = uuidv4();
+    this.Entities = {};
+    this.Systems = {};
+    this.Components = {};
     this.last_update = Date.now();
 
-    this.update = function()
+    this.Update = function()
     {
         var now = Date.now();
         var dt = now - this.last_update;
         this.last_update = now;
 
-        var systems = this.systems;
-        Object.keys(systems).forEach(function(sys) {
-            systems[sys].update(dt);
+        Object.keys(this.Systems).forEach(function(sys) {
+            this.Systems[sys].Update(dt);
         });
     }
 
-    set_manager = function(manager)
+    ManagerSet = function(manager)
     {
-        this.manager = manager;
+        this.Manager = manager;
     }
 
-    get_handle = function()
+    HandleGet = function()
     {
-        return this.handle;
+        return this.Handle;
     }
 
-    this.entity = function(handle)
+    this.Entity = function(handle)
     {
-        return entity_create(handle);
+        return EntityCreate(handle);
     }
 
     this.system = function(sys)
@@ -46,7 +44,7 @@ function Container(handle)
         this.systems[sys.get_type()] = sys;
     }
 
-    entity_create = function(handle)
+    EntityCreate = function(handle)
     {
         var e;
         if(handle === undefined)
@@ -64,19 +62,19 @@ function Container(handle)
             else e = self.entities[handle];
         }
 
-        e.set_container(self);
+        e.ContainerSet(self);
         return e;
     }
 
-    this.component = function(c)
+    this.Component = function(c)
     {
         if(this.components[c.type] === undefined)
             this.components[c.type] = {};
-        this.components[c.type][c.handle] = c;
+        this.components[c.type].push(c);
         return c;
     }
 
-    this.components_get = function(types)
+    this.ComponentsGet = function(types)
     {
         var results = [];
         var components = this.components;

@@ -1,28 +1,25 @@
 const uuidv4 = require('uuid/v4');
 
-function Entity(handle)
+function Entity()
 {
-    if(handle === undefined) handle = uuidv4();
-    this.handle = handle;
-    this.components = {};
+    this.Handle = uuidv4();
+    this.Components = {};
 
-    this.get_handle = function()
+    this.HandleGet = function()
     {
-        return this.handle;
+        return this.Handle;
     }
 
-    this.set_container = function(container)
+    this.ContainerSet = function(container)
     {
-        this.container = container;
+        this.Container = container;
     }
 
-    this.component = function(c)
+    this.Component = function(c)
     {
-        c.entity_handle = this.handle;
-        if(this.components[c.type] == undefined)
-            this.components[c.type] = {};
-        this.components[c.type][c.handle] = c;
-        this.container.component(c);
+        c.EntityHandle = this.Handle;
+        this.Components[c.Type] = c;
+        this.Container.Component(c);
     }
 }
 
