@@ -7,9 +7,9 @@ function Container()
     var self = this;
 
     this.Handle = uuidv4();
-    this.Entities = {};
-    this.Systems = {};
-    this.Components = {};
+    this.Entities = [];
+    this.Systems = [];
+    this.Components = [];
 
     this.Update = function()
     {
@@ -46,16 +46,16 @@ function Container()
         if(handle === undefined)
         {
             e = new Entity();
-            self.entities[e.HandleG()] = e;
+            self.Entities[e.HandleGet()] = e;
         }
         else
         {
-            if(self.entities[handle] === undefined)
+            if(self.Entities[handle] === undefined)
             {
                 e = new Entity(handle);
-                self.entities[e.HandleGet()] = e;
+                self.Entities[e.HandleGet()] = e;
             }
-            else e = self.entities[handle];
+            else e = self.Entities[handle];
         }
 
         e.ContainerSet(self);
@@ -64,9 +64,12 @@ function Container()
 
     this.Component = function(c)
     {
-        if(this.components[c.type] === undefined)
-            this.components[c.type] = {};
-        this.components[c.type].push(c);
+        if(this.Components[c.Type] === undefined)
+        {
+            console.log("Adding type: " + c.Type);
+            this.Components[c.Type] = [];
+        }
+        this.Components[c.Type].push(c);
         return c;
     }
 
@@ -82,18 +85,22 @@ function Container()
 
     this.Export = function()
     {
+        console.log("Container.Export()");
         var config = {};
         config.Handle = this.Handle;
         config.Entities = [];
         config.Systems = [];
 
-        this.Entities.forEach(function(e) {
-            config.Entities[e.HandleGet()] = e->Export();
+        var Entities = this.Entities;
+        Object.keys(Entities).forEach(function(e) {
+console.log("Exporting "); console.log(Entities[e]);
+            config.Entities[e] = Entities[e].Export();
         });
 
         this.Systems.forEach(function(s) {
-            config.Systems[s.HandleGet()] = s->Export();
+            config.Systems[s.HandleGet()] = s.Export();
         });
+        return config;
     }
 }
 

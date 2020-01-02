@@ -1,22 +1,30 @@
 const uuidv4 = require('uuid/v4');
 
-function Component(config)
+class Component
 {
-    this.Handle = uuidv4();
-    this.EntityHandle = null;
-
-    if(config)
+    constructor(config)
     {
-        var json = JSON.parse(config);
-        this.Data = json.Data;
+        this.Handle = uuidv4();
+        this.EntityHandle = null;
+
+        var c = this;
+        Object.keys(config).forEach(function(name) {
+            c[name] = config[name];
+        });
     }
 
-    this.Export = function()
+    Export()
     {
         var config = {};
-        config.Type = this.Type;
-        config.EntityHandle = this.EntityHandle;
-        config.Data = this.Data;
+
+        var c = this;
+        Object.keys(this).forEach(function(name) {
+            if(name == "Handle") return;
+            if(name == "EntityHandle") return;
+            if(name == "Type") return;
+
+            config[name] = c[name];
+        });
         return config;
     }
 }

@@ -22,7 +22,7 @@ function System()
 
     this.ComponentsGet = function()
     {
-        return this->Container->ComponentsGet(this->RequestedComponents);
+        return this.Container.ComponentsGet(this.RequestedComponents);
     }
 
     this.DeltaTimeGet = function()
