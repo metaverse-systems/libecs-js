@@ -10,16 +10,11 @@ function Container()
     this.Entities = {};
     this.Systems = {};
     this.Components = {};
-    this.last_update = Date.now();
 
     this.Update = function()
     {
-        var now = Date.now();
-        var dt = now - this.last_update;
-        this.last_update = now;
-
         Object.keys(this.Systems).forEach(function(sys) {
-            this.Systems[sys].Update(dt);
+            this.Systems[sys].Update();
         });
     }
 
@@ -38,10 +33,11 @@ function Container()
         return EntityCreate(handle);
     }
 
-    this.system = function(sys)
+    this.System = function(sys)
     {
         sys.set_container(this);
         this.systems[sys.get_type()] = sys;
+        return sys;
     }
 
     EntityCreate = function(handle)
@@ -50,14 +46,14 @@ function Container()
         if(handle === undefined)
         {
             e = new Entity();
-            self.entities[e.get_handle()] = e;
+            self.entities[e.HandleG()] = e;
         }
         else
         {
             if(self.entities[handle] === undefined)
             {
                 e = new Entity(handle);
-                self.entities[e.get_handle()] = e;
+                self.entities[e.HandleGet()] = e;
             }
             else e = self.entities[handle];
         }
@@ -82,6 +78,22 @@ function Container()
             results[type] = components[type];
         });
         return components;
+    }
+
+    this.Export = function()
+    {
+        var config = {};
+        config.Handle = this.Handle;
+        config.Entities = [];
+        config.Systems = [];
+
+        this.Entities.forEach(function(e) {
+            config.Entities[e.HandleGet()] = e->Export();
+        });
+
+        this.Systems.forEach(function(s) {
+            config.Systems[s.HandleGet()] = s->Export();
+        });
     }
 }
 

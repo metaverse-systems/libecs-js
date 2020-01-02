@@ -3,6 +3,7 @@ var Container = require('./Container')
 function Manager() 
 {
     var Containers = [];
+    var Running = true;
 
     var ContainerCreate = function(handle)
     {
@@ -27,6 +28,24 @@ function Manager()
     this.ContainersGet = function()
     {
         return Containers;
+    }
+
+    this.ContainersKill = function(containers)
+    {
+        containers.forEach(function(c) {
+            clearInterval(c.interval);
+        });
+    }
+
+    this.IsRunning = function()
+    {
+        return Running;
+    }
+
+    this.Shutdown = function()
+    {
+        Running = false;
+        this.ContainersKill(this.ContainersGet());
     }
 }
 

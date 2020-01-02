@@ -11,11 +11,13 @@ function Component(config)
         this.Data = json.Data;
     }
 
-    this.save = function()
+    this.Export = function()
     {
-        var output = {};
-        output.Data = this.Data;
-        return JSON.stringify(output);
+        var config = {};
+        config.Type = this.Type;
+        config.EntityHandle = this.EntityHandle;
+        config.Data = this.Data;
+        return config;
     }
 }
 
