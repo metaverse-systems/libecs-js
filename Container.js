@@ -93,7 +93,6 @@ function Container()
 
         var Entities = this.Entities;
         Object.keys(Entities).forEach(function(e) {
-console.log("Exporting "); console.log(Entities[e]);
             config.Entities[e] = Entities[e].Export();
         });
 

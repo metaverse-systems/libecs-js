@@ -28,4 +28,5 @@ var e = world.Entity();
 e.Component(new PositionComponent({ x: 10, y: 20 }));
 e.Component(new VelocityComponent({ x: 1, y: 0 }));
 
-setTimeout(function() { console.log(JSON.stringify(world.Export())) }, 1000);
+var debug = world.Export();
+//console.log(JSON.stringify(debug));

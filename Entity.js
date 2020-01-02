@@ -27,21 +27,19 @@ function Entity()
 
     this.Export = function()
     {
-        console.log("Entity.Export()");
         var config = { Handle: this.Handle, Components: [] };
         var Components = this.Components;
         Object.keys(Components).forEach(function(type) {
             if(!config.Components.includes(type))
                 config.Components[type] = [];
-            Components[type].forEach(function(entity) {
+            Object.keys(Components[type]).forEach(function(entity) {
                 Components[type][entity].forEach(function(c) {
-console.log(c);
-                    config.Components[type].push(c);
+                    config.Components[type].push(Object.entries(c.Export()));
                 });
             });
         });
 
-console.log(config);
+        console.log(config);
         return config;
     }
 }
