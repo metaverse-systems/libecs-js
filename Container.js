@@ -2,102 +2,111 @@ var Entity = require('./Entity.js')
 
 const uuidv4 = require('uuid/v4');
 
-function Container()
+class Container
 {
-    var self = this;
-
-    this.Handle = uuidv4();
-    this.Entities = [];
-    this.Systems = [];
-    this.Components = [];
-
-    this.Update = function()
+    constructor(handle)
     {
-        Object.keys(this.Systems).forEach(function(sys) {
-            this.Systems[sys].Update();
+        if(handle === undefined) this.Handle = uuidv4();
+        else this.Handle = handle;
+
+        this.Entities = [];
+        this.Systems = [];
+        this.Components = [];
+    }
+
+    Update()
+    {
+        var Systems = this.Systems;
+        Object.keys(Systems).forEach(function(sys) {
+            Systems[sys].Update();
         });
     }
 
-    ManagerSet = function(manager)
+    ManagerSet(manager)
     {
         this.Manager = manager;
     }
 
-    HandleGet = function()
+    HandleGet()
     {
         return this.Handle;
     }
 
-    this.Entity = function(handle)
+    Entity(handle)
     {
-        return EntityCreate(handle);
+        return this.EntityCreate(handle);
     }
 
-    this.System = function(sys)
+    System(sys)
     {
-        sys.set_container(this);
-        this.systems[sys.get_type()] = sys;
+        sys.ContainerSet(this);
+        this.Systems[sys.HandleGet()] = sys;
         return sys;
     }
 
-    EntityCreate = function(handle)
+    EntityCreate(handle)
     {
         var e;
         if(handle === undefined)
         {
             e = new Entity();
-            self.Entities[e.HandleGet()] = e;
+            this.Entities[e.HandleGet()] = e;
         }
         else
         {
-            if(self.Entities[handle] === undefined)
+            if(this.Entities[handle] === undefined)
             {
                 e = new Entity(handle);
-                self.Entities[e.HandleGet()] = e;
+                this.Entities[e.HandleGet()] = e;
             }
-            else e = self.Entities[handle];
+            else e = this.Entities[handle];
         }
 
-        e.ContainerSet(self);
+        e.ContainerSet(this);
         return e;
     }
 
-    this.Component = function(c)
+    Component(c)
     {
         if(this.Components[c.Type] === undefined)
         {
-            console.log("Adding type: " + c.Type);
             this.Components[c.Type] = [];
         }
-        this.Components[c.Type].push(c);
+
+        if(this.Components[c.Type][c.EntityHandle] === undefined)
+        {
+            this.Components[c.Type][c.EntityHandle] = [];
+        }
+
+        this.Components[c.Type][c.EntityHandle].push(c);
         return c;
     }
 
-    this.ComponentsGet = function(types)
+    ComponentsGet(types)
     {
         var results = [];
-        var components = this.components;
+        var Components = this.Components;
         types.forEach(function(type) {
-            results[type] = components[type];
+            results[type] = Components[type];
         });
-        return components;
+        return Components;
     }
 
-    this.Export = function()
+    Export()
     {
-        console.log("Container.Export()");
         var config = {};
         config.Handle = this.Handle;
-        config.Entities = [];
-        config.Systems = [];
+        config.Entities = {};
+        config.Systems = {};
 
         var Entities = this.Entities;
         Object.keys(Entities).forEach(function(e) {
             config.Entities[e] = Entities[e].Export();
         });
 
-        this.Systems.forEach(function(s) {
-            config.Systems[s.HandleGet()] = s.Export();
+        var Systems = this.Systems;
+        Object.keys(Systems).forEach(function(s) {
+            config.Systems[s] = Systems[s].Export();
         });
         return config;
     }

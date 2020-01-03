@@ -1,48 +1,51 @@
 var Container = require('./Container')
 
-function Manager() 
+class Manager
 {
-    var Containers = [];
-    var Running = true;
-
-    var ContainerCreate = function(handle)
+    constructor()
     {
-        var c = new Container(handle);
-        Containers[c.Handle] = c;
-
-        c.interval = setInterval(function() { c.Update() }, 50);
-        return Containers[c.Handle];
+        this.Containers = [];
+        this.Running = true;
     }
 
-    this.Container = function(handle)
+    ContainerCreate(handle)
+    {
+        var c = new Container(handle);
+        this.Containers[c.Handle] = c;
+
+        c.interval = setInterval(function() { c.Update() }, 50);
+        return this.Containers[c.Handle];
+    }
+
+    Container(handle)
     {
         if(handle !== undefined)
         {
             if(containers[handle] !== undefined) return containers[handle];
-            return ContainerCreate(handle);
+            return this.ContainerCreate(handle);
         }
 
-        return ContainerCreate();
+        return this.ContainerCreate();
     }
 
-    this.ContainersGet = function()
+    ContainersGet()
     {
         return Containers;
     }
 
-    this.ContainersKill = function(containers)
+    ContainersKill(containers)
     {
         containers.forEach(function(c) {
             clearInterval(c.interval);
         });
     }
 
-    this.IsRunning = function()
+    IsRunning()
     {
         return Running;
     }
 
-    this.Shutdown = function()
+    Shutdown()
     {
         Running = false;
         this.ContainersKill(this.ContainersGet());
