@@ -1,6 +1,6 @@
 {
   "name": "@metaverse-systems/libecs-js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Entity Component System library",
   "main": "index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/timschwartz/libecs-js.git"
+    "url": "git+https://github.com/metaversesystems/libecs-js.git"
   },
   "author": "Tim Schwartz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/timschwartz/libecs-js/issues"
+    "url": "https://github.com/metaversesystems/libecs-js/issues"
   },
-  "homepage": "https://github.com/timschwartz/libecs-js#readme",
+  "homepage": "https://github.com/metaversesystems/libecs-js#readme",
   "dependencies": {
     "uuid": "^3.3.2"
   }
