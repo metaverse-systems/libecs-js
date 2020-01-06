@@ -1,22 +1,45 @@
-const uuidv4 = require('uuid/v4');
-
-function System()
+class System
 {
-    this.id = uuidv4();
-
-    this.get_type = function()
+    constructor(config)
     {
-        return this.type;
+        this.Handle = null;
+        this.RequestedComponents = [];
+        this.LastTime = (new Date()).getTime();
     }
 
-    this.set_container = function(container)
+    HandleGet()
     {
-        this.container = container;
+        return this.Handle;
     }
 
-    this.set_type = function(type)
+    ContainerSet(container)
     {
-        this.type = type;
+        this.Container = container;
+    }
+
+    ComponentRequest(component)
+    {
+        if(this.RequestedComponents.includes(component)) return;
+        this.RequestedComponents.push(component);
+    }
+
+    ComponentsGet()
+    {
+        return this.Container.ComponentsGet(this.RequestedComponents);
+    }
+
+    DeltaTimeGet()
+    {
+        var now = (new Date()).getTime();
+        var dt = now - this.LastTime;
+        this.LastTime = now;
+        return dt;
+    }
+
+    Export()
+    {
+        var config = { Handle: this.Handle };
+        return config;
     }
 }
 

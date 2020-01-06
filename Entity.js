@@ -1,28 +1,49 @@
 const uuidv4 = require('uuid/v4');
 
-function Entity(handle)
+class Entity
 {
-    if(handle === undefined) handle = uuidv4();
-    this.handle = handle;
-    this.components = {};
-
-    this.get_handle = function()
+    constructor()
     {
-        return this.handle;
+        this.Handle = uuidv4();
+        this.Components = [];
     }
 
-    this.set_container = function(container)
+    HandleGet()
     {
-        this.container = container;
+        return this.Handle;
     }
 
-    this.component = function(c)
+    ContainerSet(container)
     {
-        c.entity_handle = this.handle;
-        if(this.components[c.type] == undefined)
-            this.components[c.type] = {};
-        this.components[c.type][c.handle] = c;
-        this.container.component(c);
+        this.Container = container;
+    }
+
+    Component(c)
+    {
+        c.EntityHandle = this.Handle;
+        if(this.Components[c.Type] === undefined) this.Components[c.Type] = [];
+        if(this.Components[c.Type][this.Handle] === undefined) 
+            this.Components[c.Type][this.Handle] = [];
+        this.Components[c.Type][this.Handle].push(c);
+        return this.Container.Component(c);
+    }
+
+    Export()
+    {
+        var config = { Handle: this.Handle, Components: {} };
+
+        var Components = this.Components;
+        Object.keys(Components).forEach(function(type) {
+            if(config.Components[type] === undefined)
+                config.Components[type] = [];
+            Object.keys(Components[type]).forEach(function(entity) {
+                Components[type][entity].forEach(function(c) {
+                    config.Components[type].push(c.Export());
+                });
+            });
+        });
+
+        return config;
     }
 }
 

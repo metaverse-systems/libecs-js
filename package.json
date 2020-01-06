@@ -1,10 +1,10 @@
 {
   "name": "@metaverse-systems/libecs-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Entity Component System library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node example"
   },
   "repository": {
     "type": "git",
