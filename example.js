@@ -47,7 +47,8 @@ class PhysicsSystem extends System
                 // Adjust position data
                 pos.x += vel.x * multiplier;
                 pos.y += vel.y * multiplier;
-                console.log(entity + " - Position - x: " + pos.x + ", y: " + pos.y + "   Velocity - x: " + vel.x + ", y: " + vel.y);
+
+                console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + pos.y + "   Velocity - x: " + vel.x + ", y: " + vel.y);
             });
         });
     }
