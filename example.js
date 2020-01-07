@@ -48,7 +48,7 @@ class PhysicsSystem extends System
                 pos.x += vel.x * multiplier;
                 pos.y += vel.y * multiplier;
 
-                console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + pos.y + "   Velocity - x: " + vel.x + ", y: " + vel.y);
+                console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + Number.parseFloat(pos.y).toFixed(2) + "   Velocity - x: " + vel.x + ", y: " + vel.y);
             });
         });
     }
@@ -66,3 +66,5 @@ e.Component(new VelocityComponent({ x: 1, y: 0 }));
 
 var debug = world.Export();
 console.log(JSON.stringify(debug, null, 4));
+
+world.Start(500); // 500ms between loops

@@ -12,6 +12,30 @@ class Container
         this.Entities = [];
         this.Systems = [];
         this.Components = [];
+
+        this.SleepInterval = 1000 / 30;
+        this.IntervalFun = null;
+        this.Running = true;
+    }
+
+    Start(interval)
+    {
+        if(interval !== undefined) this.SleepInterval = interval;
+
+        var c = this;
+        this.SystemsInit();
+        this.IntervalFunc = setInterval(function() { c.Update(); }, this.SleepInterval);
+    }
+
+    SystemsInit()
+    {
+        this.Systems.forEach(function(sys) {
+            sys.Init();
+        });
+    }
+
+    Init()
+    {
     }
 
     Update()
@@ -20,6 +44,8 @@ class Container
         Object.keys(Systems).forEach(function(sys) {
             Systems[sys].Update();
         });
+
+        if(this.Running === false) clearInterval(this.IntervalFunc);
     }
 
     ManagerSet(manager)

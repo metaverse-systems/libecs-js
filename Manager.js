@@ -12,8 +12,6 @@ class Manager
     {
         var c = new Container(handle);
         this.Containers[c.Handle] = c;
-
-        c.interval = setInterval(function() { c.Update() }, 50);
         return this.Containers[c.Handle];
     }
 
