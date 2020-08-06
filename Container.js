@@ -4,138 +4,121 @@ const uuidv4 = require('uuid/v4');
 
 class Container
 {
-    constructor(handle)
-    {
-        if(handle === undefined) this.Handle = uuidv4();
-        else this.Handle = handle;
-
-        this.Entities = [];
-        this.Systems = [];
-        this.Components = [];
-
-        this.SleepInterval = 1000 / 30;
-        this.IntervalFun = null;
-        this.Running = true;
+  constructor(handle) {
+    this.Handle = handle;
+    if(this.Handle === undefined) {
+      this.Handle = uuidv4();
     }
 
-    Start(interval)
-    {
-        if(interval !== undefined) this.SleepInterval = interval;
+    this.Entities = {};
+    this.Systems = {};
+    this.Components = {};
 
-        var c = this;
-        this.SystemsInit();
-        this.IntervalFunc = setInterval(function() { c.Update(); }, this.SleepInterval);
+    this.SleepInterval = 1000 / 30;
+    this.IntervalFunc = null;
+    this.Running = false;
+  }
+
+  Start(interval) {
+    if(interval !== undefined) {
+      this.SleepInterval = interval;
     }
 
-    SystemsInit()
+    var c = this;
+    this.SystemsInit();
+    this.IntervalFunc = setInterval(function() { c.Update(); }, this.SleepInterval);
+    this.Running = true;
+  }
+
+  SystemsInit() {
+    Object.keys(this.Systems).forEach((sys) => {
+      this.Systems[sys].Init();
+    });
+  }
+
+  Update() {
+    Object.keys(this.Systems).forEach((sys) => {
+        this.Systems[sys].Update();
+    });
+
+    if(this.Running === false) {
+      clearInterval(this.IntervalFunc);
+    }
+  }
+
+  ManagerSet(manager) {
+    this.Manager = manager;
+  }
+
+  HandleGet() {
+    return this.Handle;
+  }
+
+  Entity(handle) {
+    return this.EntityCreate(handle);
+  }
+
+  System(sys) {
+    sys.ContainerSet(this);
+    this.Systems[sys.HandleGet()] = sys;
+    return sys;
+  }
+
+  EntityCreate(handle) {
+    var e;
+    if(handle === undefined)
     {
-        this.Systems.forEach(function(sys) {
-            sys.Init();
-        });
+      e = new Entity();
+      this.Entities[e.HandleGet()] = e;
+    }
+    else
+    {
+      if(this.Entities[handle] === undefined)
+      {
+        e = new Entity(handle);
+        this.Entities[e.HandleGet()] = e;
+      }
+      else e = this.Entities[handle];
     }
 
-    Init()
+    e.ContainerSet(this);
+    return e;
+  }
+
+  Component(c)
+  {
+    if(this.Components[c.Type] === undefined)
     {
+      this.Components[c.Type] = {};
     }
 
-    Update()
-    {
-        var Systems = this.Systems;
-        Object.keys(Systems).forEach(function(sys) {
-            Systems[sys].Update();
-        });
+    this.Components[c.Type][c.EntityHandle] = c;
+    return c;
+  }
 
-        if(this.Running === false) clearInterval(this.IntervalFunc);
-    }
+  ComponentsGet(types) {
+    var results = {};
+    types.forEach((type) => {
+      results[type] = this.Components[type];
+    });
+    return results;
+  }
 
-    ManagerSet(manager)
-    {
-        this.Manager = manager;
-    }
+  Export() {
+    var config = {};
+    config.Handle = this.Handle;
+    config.Entities = [];
+    config.Systems = [];
 
-    HandleGet()
-    {
-        return this.Handle;
-    }
+    Object.keys(this.Entities).forEach((e) => {
+      config.Entities.push(this.Entities[e].Export());
+    });
 
-    Entity(handle)
-    {
-        return this.EntityCreate(handle);
-    }
-
-    System(sys)
-    {
-        sys.ContainerSet(this);
-        this.Systems[sys.HandleGet()] = sys;
-        return sys;
-    }
-
-    EntityCreate(handle)
-    {
-        var e;
-        if(handle === undefined)
-        {
-            e = new Entity();
-            this.Entities[e.HandleGet()] = e;
-        }
-        else
-        {
-            if(this.Entities[handle] === undefined)
-            {
-                e = new Entity(handle);
-                this.Entities[e.HandleGet()] = e;
-            }
-            else e = this.Entities[handle];
-        }
-
-        e.ContainerSet(this);
-        return e;
-    }
-
-    Component(c)
-    {
-        if(this.Components[c.Type] === undefined)
-        {
-            this.Components[c.Type] = [];
-        }
-
-        if(this.Components[c.Type][c.EntityHandle] === undefined)
-        {
-            this.Components[c.Type][c.EntityHandle] = [];
-        }
-
-        this.Components[c.Type][c.EntityHandle].push(c);
-        return c;
-    }
-
-    ComponentsGet(types)
-    {
-        var results = [];
-        var Components = this.Components;
-        types.forEach(function(type) {
-            results[type] = Components[type];
-        });
-        return Components;
-    }
-
-    Export()
-    {
-        var config = {};
-        config.Handle = this.Handle;
-        config.Entities = {};
-        config.Systems = {};
-
-        var Entities = this.Entities;
-        Object.keys(Entities).forEach(function(e) {
-            config.Entities[e] = Entities[e].Export();
-        });
-
-        var Systems = this.Systems;
-        Object.keys(Systems).forEach(function(s) {
-            config.Systems[s] = Systems[s].Export();
-        });
-        return config;
-    }
+    Object.keys(this.Systems).forEach((s) => {
+      config.Systems.push(this.Systems[s].Export());
+    });
+    return config;
+  }
 }
 
-module.exports = Container
+module.exports = Container;

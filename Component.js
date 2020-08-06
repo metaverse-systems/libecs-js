@@ -1,32 +1,25 @@
-const uuidv4 = require('uuid/v4');
-
+/** Base class for ECS component */
 class Component
 {
-    constructor(config)
-    {
-        this.Handle = uuidv4();
-        this.EntityHandle = null;
+  constructor(config) {
+    this.EntityHandle = null;
 
-        var c = this;
-        Object.keys(config).forEach(function(name) {
-            c[name] = config[name];
-        });
-    }
+    Object.keys(config).forEach((name) => {
+        this[name] = config[name];
+    });
+  }
 
-    Export()
-    {
-        var config = {};
+  Export() {
+    var config = {};
 
-        var c = this;
-        Object.keys(this).forEach(function(name) {
-            if(name == "Handle") return;
-            if(name == "EntityHandle") return;
-            if(name == "Type") return;
+    Object.keys(this).forEach((name) => {
+        if(name == "EntityHandle") return;
+        if(name == "Type") return;
 
-            config[name] = c[name];
-        });
-        return config;
-    }
+        config[name] = this[name];
+    });
+    return config;
+  }
 }
 
-module.exports = Component
+module.exports = Component;
