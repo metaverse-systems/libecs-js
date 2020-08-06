@@ -26,10 +26,15 @@ class PhysicsSystem extends System
 {
     constructor(config)
     {
-        super(config);
-        this.Handle = "PhysicsSystem";
-        this.ComponentRequest("PositionComponent");
-        this.ComponentRequest("VelocityComponent");
+      if(config === undefined) {
+        config = {};
+      }
+
+      super(config);
+      this.Handle = "PhysicsSystem";
+      this.ComponentRequest("PositionComponent");
+      this.ComponentRequest("VelocityComponent");
+      this.frame_time = config["frame_time"] === undefined ?  20 : config["frame_time"];
     }
 
     Update()
@@ -40,16 +45,15 @@ class PhysicsSystem extends System
 
         var Components = this.ComponentsGet();
 
-        Object.keys(Components["PositionComponent"]).forEach(function(entity) {
-            Components["PositionComponent"][entity].forEach(function(pos) {
-                var vel = Components["VelocityComponent"][entity][0];
+        Object.keys(Components["PositionComponent"]).forEach((entity) => {
+            var pos = Components["PositionComponent"][entity];
+            var vel = Components["VelocityComponent"][entity];
 
-                // Adjust position data
-                pos.x += vel.x * multiplier;
-                pos.y += vel.y * multiplier;
+            // Adjust position data
+            pos.x += vel.x * multiplier;
+            pos.y += vel.y * multiplier;
 
-                console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + Number.parseFloat(pos.y).toFixed(2) + "   Velocity - x: " + vel.x + ", y: " + vel.y);
-            });
+            console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + Number.parseFloat(pos.y).toFixed(2) + "   Velocity - x: " + vel.x + ", y: " + vel.y);
         });
     }
 }
@@ -65,6 +69,6 @@ e.Component(new VelocityComponent({ x: 1, y: 0 }));
 
 
 var debug = world.Export();
-console.log(JSON.stringify(debug, null, 4));
+console.log(JSON.stringify(debug, null, 2));
 
 world.Start(500); // 500ms between loops

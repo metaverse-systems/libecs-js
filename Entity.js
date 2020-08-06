@@ -1,50 +1,44 @@
 const uuidv4 = require('uuid/v4');
 
+/** ECS Entity */
 class Entity
 {
-    constructor()
-    {
-        this.Handle = uuidv4();
-        this.Components = [];
+  constructor() {
+    this.Handle = uuidv4();
+    this.Components = {};
+  }
+
+  HandleGet() {
+    return this.Handle;
+  }
+
+  ContainerSet(container) {
+    this.Container = container;
+  }
+
+  Component(c) {
+    c.EntityHandle = this.Handle;
+    if(this.Components[c.Type] === undefined) {
+      this.Components[c.Type] = {};
     }
+    this.Components[c.Type][this.Handle] = c;
+    return this.Container.Component(c);
+  }
 
-    HandleGet()
-    {
-        return this.Handle;
-    }
+  Export() {
+    var config = { 
+      Handle: this.Handle,
+      Components: {}
+    };
 
-    ContainerSet(container)
-    {
-        this.Container = container;
-    }
+    Object.keys(this.Components).forEach((type) => {
+      Object.keys(this.Components[type]).forEach((entity) => {
+        config.Components[type] = this.Components[type][entity].Export();
+      });
+    });
 
-    Component(c)
-    {
-        c.EntityHandle = this.Handle;
-        if(this.Components[c.Type] === undefined) this.Components[c.Type] = [];
-        if(this.Components[c.Type][this.Handle] === undefined) 
-            this.Components[c.Type][this.Handle] = [];
-        this.Components[c.Type][this.Handle].push(c);
-        return this.Container.Component(c);
-    }
-
-    Export()
-    {
-        var config = { Handle: this.Handle, Components: {} };
-
-        var Components = this.Components;
-        Object.keys(Components).forEach(function(type) {
-            if(config.Components[type] === undefined)
-                config.Components[type] = [];
-            Object.keys(Components[type]).forEach(function(entity) {
-                Components[type][entity].forEach(function(c) {
-                    config.Components[type].push(c.Export());
-                });
-            });
-        });
-
-        return config;
-    }
+    return config;
+  }
 }
 
-module.exports = Entity
+module.exports = Entity;
