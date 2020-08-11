@@ -85,6 +85,12 @@ class Container
     return e;
   }
 
+  EntityDestroy(handle) {
+    Object.keys(this.Components).forEach((type) => {
+      delete this.Components[type][handle];
+    });
+  }
+
   Component(c)
   {
     if(this.Components[c.Type] === undefined)
@@ -100,6 +106,9 @@ class Container
     var results = {};
     types.forEach((type) => {
       results[type] = this.Components[type];
+      if(results[type] === undefined) {
+        results[type] = {};
+      }
     });
     return results;
   }

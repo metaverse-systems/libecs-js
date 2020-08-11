@@ -39,6 +39,10 @@ class Entity
 
     return config;
   }
+
+  destroy() {
+    this.Container.EntityDestroy(this.Handle);
+  }
 }
 
 module.exports = Entity;
