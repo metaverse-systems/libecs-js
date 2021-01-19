@@ -4,14 +4,8 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [ '@babel/preset-env' ]
-          }
-        }
+        test: /\.tsx?$/, 
+        loader: "ts-loader"
       }
     ]
   }
@@ -19,12 +13,13 @@ const config = {
 
 const libConfig = Object.assign({}, config, {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.ts',
   output: {
     path: path.resolve('lib'),
     filename: 'index.js',
     libraryTarget: 'commonjs2',
-  }
+  },
+  devtool: 'source-map'
 });
 
 const exampleConfig = Object.assign({}, config, {
@@ -41,28 +36,3 @@ module.exports = [
   libConfig,
   exampleConfig
 ];
-/*
-module.exports = {
-  mode: 'production',
-  entry: './src/index.js',
-  output: {
-    path: path.resolve('lib'),
-    filename: 'index.js',
-    libraryTarget: 'commonjs2',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js?$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [ '@babel/preset-env' ]
-          }
-        }
-      }
-    ],
-  }
-};
-*/
