@@ -1,7 +1,7 @@
 const ecs_lib = require('../lib');
-var Component = ecs_lib.Component;
-var Manager = ecs_lib.Manager;
-var System = ecs_lib.System;
+var Component = ecs_lib.default.Component;
+var Manager = ecs_lib.default.Manager;
+var System = ecs_lib.default.System;
 
 var ECS = new Manager();
 
@@ -64,7 +64,6 @@ class PhysicsSystem extends System
   world.System(new PhysicsSystem());
 
   var e = world.Entity();
-
   e.Component(new PositionComponent({ x: 10, y: 20 }));
   e.Component(new VelocityComponent({ x: 1, y: 0 }));
 
@@ -73,3 +72,4 @@ class PhysicsSystem extends System
   console.log(JSON.stringify(debug, null, 2));
 
   world.Start(500); // 500ms between loops
+

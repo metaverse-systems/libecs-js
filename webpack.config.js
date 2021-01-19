@@ -5,7 +5,8 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/, 
-        loader: "ts-loader"
+        loader: "ts-loader",
+        exclude: /(node_modules)/
       }
     ]
   }
@@ -19,20 +20,12 @@ const libConfig = Object.assign({}, config, {
     filename: 'index.js',
     libraryTarget: 'commonjs2',
   },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
   devtool: 'source-map'
 });
 
-const exampleConfig = Object.assign({}, config, {
-  mode: 'production',
-  entry: './example/example.js',
-  output: {
-    path: path.resolve('example'),
-    filename: 'test.js',
-    libraryTarget: 'commonjs2',
-  }
-});
-
 module.exports = [
-  libConfig,
-  exampleConfig
+  libConfig
 ];

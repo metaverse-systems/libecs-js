@@ -3,8 +3,11 @@ const uuidv4 = require('uuid/v4');
 /** ECS Entity */
 class Entity
 {
-  constructor() {
-    this.Handle = uuidv4();
+  Handle:string;
+  Components: object;
+  Container: any;
+  constructor(handle?: string) {
+    this.Handle = (handle === undefined) ? uuidv4() : handle;
     this.Components = {};
   }
 
@@ -45,4 +48,4 @@ class Entity
   }
 }
 
-module.exports = Entity;
+export default Entity;

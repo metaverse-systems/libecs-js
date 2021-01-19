@@ -1,9 +1,18 @@
-var Entity = require('./Entity.js')
+import Entity from './Entity';
+import System from './System';
 
 const uuidv4 = require('uuid/v4');
 
 class Container
 {
+  Handle: string;
+  Entities: object;
+  Systems: object;
+  Components: object;
+  SleepInterval: number;
+  IntervalFunc: any;
+  Running: boolean;
+  Manager: any;
   constructor(handle) {
     this.Handle = handle;
     if(this.Handle === undefined) {
@@ -64,7 +73,7 @@ class Container
     return sys;
   }
 
-  EntityCreate(handle) {
+  EntityCreate(handle?: string) {
     var e;
     if(handle === undefined)
     {
@@ -79,7 +88,7 @@ class Container
         this.Entities[e.HandleGet()] = e;
       }
       else e = this.Entities[handle];
-    }
+    } 
 
     e.ContainerSet(this);
     return e;
@@ -114,7 +123,12 @@ class Container
   }
 
   Export() {
-    var config = {};
+    interface Iconfig {
+      Handle: string;
+      Entities: Array<Entity>;
+      Systems: Array<System>;
+    }
+    var config = {} as Iconfig;
     config.Handle = this.Handle;
     config.Entities = [];
     config.Systems = [];
@@ -130,4 +144,4 @@ class Container
   }
 }
 
-module.exports = Container;
+export default Container;

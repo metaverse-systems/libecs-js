@@ -1,7 +1,9 @@
 /** Base class for ECS component */
 class Component
 {
-  constructor(config) {
+  EntityHandle: string;
+  Type: string;
+  constructor(config: object) {
     this.EntityHandle = null;
 
     Object.keys(config).forEach((name) => {
@@ -22,4 +24,4 @@ class Component
   }
 }
 
-module.exports = Component;
+export default Component;

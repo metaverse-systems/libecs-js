@@ -1,5 +1,5 @@
-var Component = require('./Component');
-var Manager = require('./Manager');
-var System = require('./System');
+import Component from './Component';
+import Manager from './Manager';
+import System from './System';
 
-module.exports = { Component: Component, Manager: Manager, System: System };
+export default { Component: Component, Manager: Manager, System: System };

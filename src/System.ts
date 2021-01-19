@@ -1,6 +1,10 @@
 /** Base class for ECS System */
 class System
 {
+  Handle: string;
+  RequestedComponents: Array<string>;
+  LastTime: number;
+  Container: any;
   constructor(config) {
     this.Handle = null;
     this.RequestedComponents = [];
@@ -52,4 +56,4 @@ class System
   }
 }
 
-module.exports = System;
+export default System;

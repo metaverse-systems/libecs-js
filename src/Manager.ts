@@ -1,34 +1,36 @@
-var Container = require('./Container')
+import Container from './Container';
 
 class Manager
 {
+    Containers: Array<Container>;
+    Running: boolean;
     constructor()
     {
         this.Containers = [];
         this.Running = true;
     }
 
-    ContainerCreate(handle)
+    ContainerCreate(handle: string|null)
     {
         var c = new Container(handle);
         this.Containers[c.Handle] = c;
         return this.Containers[c.Handle];
     }
 
-    Container(handle)
+    Container(handle: string|null)
     {
-        if(handle !== undefined)
+        if(handle !== null)
         {
-            if(containers[handle] !== undefined) return containers[handle];
+            if(this.Containers[handle] !== undefined) return this.Containers[handle];
             return this.ContainerCreate(handle);
         }
 
-        return this.ContainerCreate();
+        return this.ContainerCreate(null);
     }
 
     ContainersGet()
     {
-        return Containers;
+        return this.Containers;
     }
 
     ContainersKill(containers)
@@ -40,14 +42,14 @@ class Manager
 
     IsRunning()
     {
-        return Running;
+        return this.Running;
     }
 
     Shutdown()
     {
-        Running = false;
+        this.Running = false;
         this.ContainersKill(this.ContainersGet());
     }
 }
 
-module.exports = Manager 
+export default Manager;
