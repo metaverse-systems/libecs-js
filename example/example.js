@@ -1,6 +1,7 @@
-var Component = require('./Component')
-var Manager = require('./Manager')
-var System = require('./System')
+const ecs_lib = require('../lib');
+var Component = ecs_lib.Component;
+var Manager = ecs_lib.Manager;
+var System = ecs_lib.System;
 
 var ECS = new Manager();
 
@@ -58,17 +59,17 @@ class PhysicsSystem extends System
     }
 }
 
-var world = ECS.Container();
+  var world = ECS.Container();
 
-world.System(new PhysicsSystem());
+  world.System(new PhysicsSystem());
 
-var e = world.Entity();
+  var e = world.Entity();
 
-e.Component(new PositionComponent({ x: 10, y: 20 }));
-e.Component(new VelocityComponent({ x: 1, y: 0 }));
+  e.Component(new PositionComponent({ x: 10, y: 20 }));
+  e.Component(new VelocityComponent({ x: 1, y: 0 }));
 
 
-var debug = world.Export();
-console.log(JSON.stringify(debug, null, 2));
+  var debug = world.Export();
+  console.log(JSON.stringify(debug, null, 2));
 
-world.Start(500); // 500ms between loops
+  world.Start(500); // 500ms between loops
