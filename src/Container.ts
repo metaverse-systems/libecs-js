@@ -40,6 +40,10 @@ class Container
     this.Running = true;
   }
 
+  Stop() {
+    this.Running = false;
+  }
+
   SystemsInit() {
     if(this.isInit) return;
     Object.keys(this.Systems).forEach((sys) => {
