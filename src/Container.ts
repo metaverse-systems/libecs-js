@@ -1,7 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
 import Entity from './Entity';
 import { System } from './System';
-
-const uuidv4 = require('uuid/v4');
 
 class Container
 {

@@ -1,9 +1,9 @@
 const ecs_lib = require('../lib');
-var Component = ecs_lib.default.Component;
-var Manager = ecs_lib.default.Manager;
-var System = ecs_lib.default.System;
+const Component = ecs_lib.Component;
+const Manager = ecs_lib.Manager;
+const System = ecs_lib.System;
 
-var ECS = new Manager();
+const ECS = new Manager();
 
 class PositionComponent extends Component
 {
