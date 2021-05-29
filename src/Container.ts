@@ -1,5 +1,5 @@
 import Entity from './Entity';
-import System from './System';
+import { System } from './System';
 
 const uuidv4 = require('uuid/v4');
 
@@ -13,6 +13,7 @@ class Container
   IntervalFunc: any;
   Running: boolean;
   Manager: any;
+  isInit: boolean;
   constructor(handle) {
     this.Handle = handle;
     if(this.Handle === undefined) {
@@ -26,6 +27,7 @@ class Container
     this.SleepInterval = 1000 / 30;
     this.IntervalFunc = null;
     this.Running = false;
+    this.isInit = false;
   }
 
   Start(interval) {
@@ -33,16 +35,17 @@ class Container
       this.SleepInterval = interval;
     }
 
-    var c = this;
     this.SystemsInit();
-    this.IntervalFunc = setInterval(function() { c.Update(); }, this.SleepInterval);
+    this.IntervalFunc = setInterval(() => this.Update(), this.SleepInterval);
     this.Running = true;
   }
 
   SystemsInit() {
+    if(this.isInit) return;
     Object.keys(this.Systems).forEach((sys) => {
       this.Systems[sys].Init();
     });
+    this.isInit = true;
   }
 
   Update() {

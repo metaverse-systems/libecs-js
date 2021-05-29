@@ -52,4 +52,4 @@ class Manager
     }
 }
 
-export default Manager;
+export { Manager };

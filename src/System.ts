@@ -56,4 +56,4 @@ class System
   }
 }
 
-export default System;
+export { System };
