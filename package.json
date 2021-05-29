@@ -1,6 +1,6 @@
 {
   "name": "@metaverse-systems/libecs-js",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Entity Component System library",
   "main": "lib/index.js",
   "scripts": {
