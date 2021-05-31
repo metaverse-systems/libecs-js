@@ -44,9 +44,9 @@ class Container
   }
 
   SystemsInit() {
-    if(this.isInit) return;
     Object.keys(this.Systems).forEach((sys) => {
-      this.Systems[sys].Init();
+      if(!this.isInit) this.Systems[sys].Init();
+      this.Systems[sys].LastTime = (new Date()).getTime();
     });
     this.isInit = true;
   }

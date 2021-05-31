@@ -9,6 +9,10 @@ class System
     this.Handle = null;
     this.RequestedComponents = [];
     this.LastTime = (new Date()).getTime();
+
+    Object.keys(config).map((key) => {
+      this.config[key] = config[key];
+    });
   }
 
   HandleGet() {
@@ -43,13 +47,8 @@ class System
       Handle: this.Handle
     };
 
-    Object.keys(this).forEach((name) => {
-      if(name == "Handle") return;
-      if(name == "Container") return;
-      if(name == "RequestedComponents") return;
-      if(name == "LastTime") return;
-
-      config[name] = this[name];
+    Object.keys(this.config).forEach((name) => {
+      config[name] = this.config[name];
     });
 
     return config;
