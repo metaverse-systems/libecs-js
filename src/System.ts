@@ -5,13 +5,19 @@ class System
   RequestedComponents: Array<string>;
   LastTime: number;
   Container: any;
+  config: any;
   constructor(config) {
     this.Handle = null;
     this.RequestedComponents = [];
     this.LastTime = (new Date()).getTime();
+    this.config = {};
 
     Object.keys(config).map((key) => {
-      this.config[key] = config[key];
+      if(typeof config[key] == "function") {
+        this[key] = config[key];
+      } else {
+        this.config[key] = config[key];
+      }
     });
   }
 
