@@ -104,6 +104,7 @@ class Container
     Object.keys(this.Components).forEach((type) => {
       delete this.Components[type][handle];
     });
+    delete this.Entities[handle];
   }
 
   Component(c)
