@@ -14,10 +14,7 @@ class Container
   Manager: any;
   isInit: boolean;
   constructor(handle) {
-    this.Handle = handle;
-    if(this.Handle === undefined) {
-      this.Handle = uuidv4();
-    }
+    this.Handle = handle ? handle : uuidv4();
 
     this.Entities = {};
     this.Systems = {};
@@ -80,7 +77,7 @@ class Container
   }
 
   EntityCreate(handle?: string) {
-    var e;
+    let e;
     if(handle === undefined)
     {
       e = new Entity();
@@ -119,7 +116,7 @@ class Container
   }
 
   ComponentsGet(types) {
-    var results = {};
+    const results = {};
     types.forEach((type) => {
       results[type] = this.Components[type];
       if(results[type] === undefined) {

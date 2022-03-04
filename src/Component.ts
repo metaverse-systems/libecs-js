@@ -12,7 +12,7 @@ class Component
   }
 
   Export() {
-    var config = {};
+    const config = {};
 
     Object.keys(this).forEach((name) => {
         if(name == "EntityHandle") return;

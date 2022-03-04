@@ -49,13 +49,10 @@ class System
   }
 
   Export() {
-    var config = {
+    const config = {
+      ...this,
       Handle: this.Handle
     };
-
-    Object.keys(this.config).forEach((name) => {
-      config[name] = this.config[name];
-    });
 
     return config;
   }
