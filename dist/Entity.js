@@ -22,7 +22,7 @@ class Entity {
         return this.Container.Component(c);
     }
     Export() {
-        var config = {
+        const config = {
             Handle: this.Handle,
             Components: {}
         };

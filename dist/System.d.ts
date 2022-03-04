@@ -12,7 +12,7 @@ declare class System {
     ComponentsGet(): any;
     DeltaTimeGet(): number;
     Init(): void;
-    Export(): {
+    Export(): this & {
         Handle: string;
     };
 }

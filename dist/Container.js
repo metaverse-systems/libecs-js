@@ -7,10 +7,7 @@ const uuid_1 = require("uuid");
 const Entity_1 = __importDefault(require("./Entity"));
 class Container {
     constructor(handle) {
-        this.Handle = handle;
-        if (this.Handle === undefined) {
-            this.Handle = (0, uuid_1.v4)();
-        }
+        this.Handle = handle ? handle : (0, uuid_1.v4)();
         this.Entities = {};
         this.Systems = {};
         this.Components = {};
@@ -61,7 +58,7 @@ class Container {
         return sys;
     }
     EntityCreate(handle) {
-        var e;
+        let e;
         if (handle === undefined) {
             e = new Entity_1.default();
             this.Entities[e.HandleGet()] = e;
@@ -81,6 +78,7 @@ class Container {
         Object.keys(this.Components).forEach((type) => {
             delete this.Components[type][handle];
         });
+        delete this.Entities[handle];
     }
     Component(c) {
         if (this.Components[c.Type] === undefined) {
@@ -90,7 +88,7 @@ class Container {
         return c;
     }
     ComponentsGet(types) {
-        var results = {};
+        const results = {};
         types.forEach((type) => {
             results[type] = this.Components[type];
             if (results[type] === undefined) {

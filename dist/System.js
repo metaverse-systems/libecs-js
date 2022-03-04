@@ -40,12 +40,7 @@ class System {
     Init() {
     }
     Export() {
-        var config = {
-            Handle: this.Handle
-        };
-        Object.keys(this.config).forEach((name) => {
-            config[name] = this.config[name];
-        });
+        const config = Object.assign(Object.assign({}, this), { Handle: this.Handle });
         return config;
     }
 }
