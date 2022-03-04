@@ -1,42 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var uuid_1 = require("uuid");
+const uuid_1 = require("uuid");
 /** ECS Entity */
-var Entity = /** @class */ (function () {
-    function Entity(handle) {
+class Entity {
+    constructor(handle) {
         this.Handle = (handle === undefined) ? (0, uuid_1.v4)() : handle;
         this.Components = {};
     }
-    Entity.prototype.HandleGet = function () {
+    HandleGet() {
         return this.Handle;
-    };
-    Entity.prototype.ContainerSet = function (container) {
+    }
+    ContainerSet(container) {
         this.Container = container;
-    };
-    Entity.prototype.Component = function (c) {
+    }
+    Component(c) {
         c.EntityHandle = this.Handle;
         if (this.Components[c.Type] === undefined) {
             this.Components[c.Type] = {};
         }
         this.Components[c.Type][this.Handle] = c;
         return this.Container.Component(c);
-    };
-    Entity.prototype.Export = function () {
-        var _this = this;
+    }
+    Export() {
         var config = {
             Handle: this.Handle,
             Components: {}
         };
-        Object.keys(this.Components).forEach(function (type) {
-            Object.keys(_this.Components[type]).forEach(function (entity) {
-                config.Components[type] = _this.Components[type][entity].Export();
+        Object.keys(this.Components).forEach((type) => {
+            Object.keys(this.Components[type]).forEach((entity) => {
+                config.Components[type] = this.Components[type][entity].Export();
             });
         });
         return config;
-    };
-    Entity.prototype.destroy = function () {
+    }
+    destroy() {
         this.Container.EntityDestroy(this.Handle);
-    };
-    return Entity;
-}());
+    }
+}
 exports.default = Entity;
+//# sourceMappingURL=Entity.js.map

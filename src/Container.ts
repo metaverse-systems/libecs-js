@@ -127,15 +127,15 @@ class Container
   }
 
   Export() {
-    interface Iconfig {
+    const config: {
       Handle: string;
       Entities: Array<Entity>;
       Systems: Array<System>;
-    }
-    var config = {} as Iconfig;
-    config.Handle = this.Handle;
-    config.Entities = [];
-    config.Systems = [];
+    } = {
+      Handle: this.Handle,
+      Entities: [],
+      Systems: []
+    };
 
     Object.keys(this.Entities).forEach((e) => {
       config.Entities.push(this.Entities[e].Export());

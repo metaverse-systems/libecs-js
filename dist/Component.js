@@ -2,26 +2,24 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Component = void 0;
 /** Base class for ECS component */
-var Component = /** @class */ (function () {
-    function Component(config) {
-        var _this = this;
+class Component {
+    constructor(config) {
         this.EntityHandle = null;
-        Object.keys(config).forEach(function (name) {
-            _this[name] = config[name];
+        Object.keys(config).forEach((name) => {
+            this[name] = config[name];
         });
     }
-    Component.prototype.Export = function () {
-        var _this = this;
+    Export() {
         var config = {};
-        Object.keys(this).forEach(function (name) {
+        Object.keys(this).forEach((name) => {
             if (name == "EntityHandle")
                 return;
             if (name == "Type")
                 return;
-            config[name] = _this[name];
+            config[name] = this[name];
         });
         return config;
-    };
-    return Component;
-}());
+    }
+}
 exports.Component = Component;
+//# sourceMappingURL=Component.js.map

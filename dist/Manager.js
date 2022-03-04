@@ -1,40 +1,43 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Manager = void 0;
-var Container_1 = require("./Container");
-var Manager = /** @class */ (function () {
-    function Manager() {
+const Container_1 = __importDefault(require("./Container"));
+class Manager {
+    constructor() {
         this.Containers = [];
         this.Running = true;
     }
-    Manager.prototype.ContainerCreate = function (handle) {
+    ContainerCreate(handle) {
         var c = new Container_1.default(handle);
         this.Containers[c.Handle] = c;
         return this.Containers[c.Handle];
-    };
-    Manager.prototype.Container = function (handle) {
+    }
+    Container(handle) {
         if (handle !== null) {
             if (this.Containers[handle] !== undefined)
                 return this.Containers[handle];
             return this.ContainerCreate(handle);
         }
         return this.ContainerCreate(null);
-    };
-    Manager.prototype.ContainersGet = function () {
+    }
+    ContainersGet() {
         return this.Containers;
-    };
-    Manager.prototype.ContainersKill = function (containers) {
+    }
+    ContainersKill(containers) {
         containers.forEach(function (c) {
             clearInterval(c.interval);
         });
-    };
-    Manager.prototype.IsRunning = function () {
+    }
+    IsRunning() {
         return this.Running;
-    };
-    Manager.prototype.Shutdown = function () {
+    }
+    Shutdown() {
         this.Running = false;
         this.ContainersKill(this.ContainersGet());
-    };
-    return Manager;
-}());
+    }
+}
 exports.Manager = Manager;
+//# sourceMappingURL=Manager.js.map
