@@ -48,4 +48,4 @@ class Entity
   }
 }
 
-export default Entity;
+export { Entity };

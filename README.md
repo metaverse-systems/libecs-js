@@ -2,4 +2,4 @@
 
 ### Entity Component System library for JavaScript
 
-See ````example/example.js```` for a minimal example.
+See ````example/example.ts```` for a minimal example.

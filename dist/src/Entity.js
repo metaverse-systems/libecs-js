@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Entity = void 0;
 const uuid_1 = require("uuid");
 /** ECS Entity */
 class Entity {
@@ -37,5 +38,5 @@ class Entity {
         this.Container.EntityDestroy(this.Handle);
     }
 }
-exports.default = Entity;
+exports.Entity = Entity;
 //# sourceMappingURL=Entity.js.map

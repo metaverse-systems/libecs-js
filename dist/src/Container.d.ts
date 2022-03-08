@@ -1,4 +1,4 @@
-import Entity from './Entity';
+import { Entity } from './Entity';
 import { System } from './System';
 declare class Container {
     Handle: string;

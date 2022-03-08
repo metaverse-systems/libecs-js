@@ -13,4 +13,4 @@ declare class Entity {
     };
     destroy(): void;
 }
-export default Entity;
+export { Entity };

@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const uuid_1 = require("uuid");
-const Entity_1 = __importDefault(require("./Entity"));
+const Entity_1 = require("./Entity");
 class Container {
     constructor(handle) {
         this.Handle = handle ? handle : uuid_1.v4();
@@ -61,12 +58,12 @@ class Container {
     EntityCreate(handle) {
         let e;
         if (handle === undefined) {
-            e = new Entity_1.default();
+            e = new Entity_1.Entity();
             this.Entities[e.HandleGet()] = e;
         }
         else {
             if (this.Entities[handle] === undefined) {
-                e = new Entity_1.default(handle);
+                e = new Entity_1.Entity(handle);
                 this.Entities[e.HandleGet()] = e;
             }
             else
