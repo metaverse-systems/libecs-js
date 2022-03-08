@@ -2,13 +2,11 @@
 class System
 {
   Handle: string;
-  RequestedComponents: Array<string>;
   LastTime: number;
   Container: any;
   config: any;
   constructor(config) {
     this.Handle = null;
-    this.RequestedComponents = [];
     this.LastTime = (new Date()).getTime();
     this.config = {};
 
@@ -29,18 +27,9 @@ class System
     this.Container = container;
   }
 
-  ComponentRequest(component) {
-    if(this.RequestedComponents.includes(component)) return;
-    this.RequestedComponents.push(component);
-  }
-
-  ComponentsGet() {
-    return this.Container.ComponentsGet(this.RequestedComponents);
-  }
-
   DeltaTimeGet() {
-    var now = (new Date()).getTime();
-    var dt = now - this.LastTime;
+    const now = (new Date()).getTime();
+    const dt = now - this.LastTime;
     this.LastTime = now;
     return dt;
   }

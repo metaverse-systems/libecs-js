@@ -8,7 +8,7 @@ const uuid_1 = require("uuid");
 const Entity_1 = __importDefault(require("./Entity"));
 class Container {
     constructor(handle) {
-        this.Handle = handle ? handle : (0, uuid_1.v4)();
+        this.Handle = handle ? handle : uuid_1.v4();
         this.Entities = {};
         this.Systems = {};
         this.Components = {};

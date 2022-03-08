@@ -7,7 +7,7 @@ class Container
   Handle: string;
   Entities: object;
   Systems: object;
-  Components: object;
+  Components: any;
   SleepInterval: number;
   IntervalFunc: any;
   Running: boolean;
@@ -66,7 +66,7 @@ class Container
     return this.Handle;
   }
 
-  Entity(handle) {
+  Entity(handle?: string) {
     return this.EntityCreate(handle);
   }
 
@@ -148,4 +148,4 @@ class Container
   }
 }
 
-export default Container;
+export { Container };

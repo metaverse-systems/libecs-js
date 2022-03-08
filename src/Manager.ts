@@ -1,4 +1,4 @@
-import Container from './Container';
+import { Container } from './Container';
 
 class Manager
 {
@@ -10,14 +10,14 @@ class Manager
         this.Running = true;
     }
 
-    ContainerCreate(handle: string|null)
+    ContainerCreate(handle: string|null = null)
     {
-        var c = new Container(handle);
+        const c = new Container(handle);
         this.Containers[c.Handle] = c;
         return this.Containers[c.Handle];
     }
 
-    Container(handle: string|null)
+    Container(handle: string|null = null)
     {
         if(handle !== null)
         {
@@ -35,9 +35,7 @@ class Manager
 
     ContainersKill(containers)
     {
-        containers.forEach(function(c) {
-            clearInterval(c.interval);
-        });
+        containers.forEach((c) => clearInterval(c.interval));
     }
 
     IsRunning()

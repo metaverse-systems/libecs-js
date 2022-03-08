@@ -6,8 +6,12 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "lib": ["es2016", "dom"]
   },
-  "lib": ["es2015"],
-  "include": ["./src/**/*"]
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "out": "docs"
+  },
+  "include": ["./src/**/*", "./example/*"]
 }

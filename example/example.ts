@@ -1,7 +1,18 @@
-const ecs_lib = require('../lib');
-const Component = ecs_lib.Component;
-const Manager = ecs_lib.Manager;
-const System = ecs_lib.System;
+import { Manager, Component, System } from "..";
+
+/** Copied from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#examples */
+const getCircularReplacer = () => {
+  const seen = new WeakSet();
+  return (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+};
 
 const ECS = new Manager();
 
@@ -25,7 +36,8 @@ class VelocityComponent extends Component
 
 class PhysicsSystem extends System
 {
-    constructor(config)
+    frame_time: number;
+    constructor(config?: any)
     {
       if(config === undefined) {
         config = {};
@@ -54,22 +66,23 @@ class PhysicsSystem extends System
             pos.x += vel.x * multiplier;
             pos.y += vel.y * multiplier;
 
-            console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + Number.parseFloat(pos.y).toFixed(2) + "   Velocity - x: " + vel.x + ", y: " + vel.y);
+            console.log(entity + " - Position - x: " + Number.parseFloat(pos.x).toFixed(2) + ", y: " + Number.parseFloat(pos.y).toFixed(2));
+            console.log("   Velocity - x: " + vel.x + ", y: " + vel.y);
         });
     }
 }
 
-  var world = ECS.Container();
+  const world = ECS.Container();
 
   world.System(new PhysicsSystem());
 
-  var e = world.Entity();
+  const e = world.Entity();
   e.Component(new PositionComponent({ x: 10, y: 20 }));
   e.Component(new VelocityComponent({ x: 1, y: 0 }));
 
 
-  var debug = world.Export();
-  console.log(JSON.stringify(debug, null, 2));
+  const debug = world.Export();
+  console.log(JSON.stringify(debug, getCircularReplacer(), 2));
 
   world.Start(500); // 500ms between loops
 
