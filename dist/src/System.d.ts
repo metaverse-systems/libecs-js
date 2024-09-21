@@ -1,16 +1,23 @@
-/** Base class for ECS System */
+import { Container } from './Container';
+declare type SystemConfig = {
+    handle?: string;
+    [key: string]: any;
+};
 declare class System {
-    Handle: string;
-    LastTime: number;
-    Container: any;
-    config: any;
-    constructor(config: any);
+    private handle;
+    protected lastTime: number;
+    protected container?: Container;
+    protected config: SystemConfig;
+    constructor(config?: SystemConfig);
     HandleGet(): string;
-    ContainerSet(container: any): void;
+    ContainerSet(container: Container): void;
+    /** Get the delta time since the last update and reset the lastTime */
     DeltaTimeGet(): number;
+    /** Initialize the system (can be overridden by subclasses) */
     Init(): void;
-    Export(): this & {
-        Handle: string;
-    };
+    /** Update the system (must be implemented by subclasses) */
+    Update(): void;
+    /** Export the system's current configuration */
+    Export(): Record<string, any>;
 }
-export { System };
+export { System, SystemConfig };

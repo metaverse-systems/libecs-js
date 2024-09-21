@@ -34,15 +34,13 @@ class PhysicsSystem extends __1.System {
         }
         super(config);
         this.Handle = "PhysicsSystem";
-        this.ComponentRequest("PositionComponent");
-        this.ComponentRequest("VelocityComponent");
         this.frame_time = config["frame_time"] === undefined ? 20 : config["frame_time"];
     }
     Update() {
         const dt = this.DeltaTimeGet();
         const multiplier = dt / 1000;
         console.log("Last run " + dt + "ms ago.");
-        var Components = this.ComponentsGet();
+        const Components = this.Container.ComponentsGet(["PositionComponent", "VelocityComponent"]);
         Object.keys(Components["PositionComponent"]).forEach((entity) => {
             const pos = Components["PositionComponent"][entity];
             const vel = Components["VelocityComponent"][entity];

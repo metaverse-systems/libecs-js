@@ -1,8 +1,8 @@
 /** Base class for ECS component */
 class Component
 {
-  EntityHandle: string;
-  Type: string;
+  public EntityHandle: string;
+  public Type: string;
   constructor(config: object) {
     this.EntityHandle = null;
 

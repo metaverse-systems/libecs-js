@@ -5,7 +5,7 @@ const uuid_1 = require("uuid");
 /** ECS Entity */
 class Entity {
     constructor(handle) {
-        this.Handle = (handle === undefined) ? uuid_1.v4() : handle;
+        this.Handle = (handle === undefined) ? (0, uuid_1.v4)() : handle;
         this.Components = {};
     }
     HandleGet() {

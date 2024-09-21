@@ -45,8 +45,6 @@ class PhysicsSystem extends System
 
       super(config);
       this.Handle = "PhysicsSystem";
-      this.ComponentRequest("PositionComponent");
-      this.ComponentRequest("VelocityComponent");
       this.frame_time = config["frame_time"] === undefined ?  20 : config["frame_time"];
     }
 
@@ -56,7 +54,7 @@ class PhysicsSystem extends System
         const multiplier = dt / 1000;
         console.log("Last run " + dt + "ms ago.");
 
-        var Components = this.ComponentsGet();
+        const Components = this.Container.ComponentsGet(["PositionComponent", "VelocityComponent"]);
 
         Object.keys(Components["PositionComponent"]).forEach((entity) => {
             const pos = Components["PositionComponent"][entity];

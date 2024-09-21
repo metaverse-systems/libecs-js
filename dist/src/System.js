@@ -1,38 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.System = void 0;
-/** Base class for ECS System */
 class System {
-    constructor(config) {
-        this.Handle = null;
-        this.LastTime = (new Date()).getTime();
-        this.config = {};
-        Object.keys(config).map((key) => {
-            if (typeof config[key] == "function") {
-                this[key] = config[key];
-            }
-            else {
-                this.config[key] = config[key];
-            }
-        });
+    constructor(config = {}) {
+        this.handle = config.handle || `system-${Date.now()}`;
+        this.lastTime = Date.now();
+        this.config = config;
     }
     HandleGet() {
-        return this.Handle;
+        return this.handle;
     }
     ContainerSet(container) {
-        this.Container = container;
+        this.container = container;
     }
+    /** Get the delta time since the last update and reset the lastTime */
     DeltaTimeGet() {
-        const now = (new Date()).getTime();
-        const dt = now - this.LastTime;
-        this.LastTime = now;
-        return dt;
+        const now = Date.now();
+        const deltaTime = now - this.lastTime;
+        this.lastTime = now;
+        return deltaTime;
     }
+    /** Initialize the system (can be overridden by subclasses) */
     Init() {
+        // Optional initialization logic
     }
+    /** Update the system (must be implemented by subclasses) */
+    Update() {
+        throw new Error('System.Update() must be implemented by derived systems');
+    }
+    /** Export the system's current configuration */
     Export() {
-        const config = Object.assign(Object.assign({}, this), { Handle: this.Handle });
-        return config;
+        return Object.assign({ handle: this.handle }, this.config);
     }
 }
 exports.System = System;

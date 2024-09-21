@@ -4,109 +4,88 @@ exports.Container = void 0;
 const uuid_1 = require("uuid");
 const Entity_1 = require("./Entity");
 class Container {
-    constructor(handle) {
-        this.Handle = handle ? handle : uuid_1.v4();
-        this.Entities = {};
-        this.Systems = {};
-        this.Components = {};
-        this.SleepInterval = 1000 / 30;
-        this.IntervalFunc = null;
-        this.Running = false;
+    constructor(Handle = (0, uuid_1.v4)()) {
+        this.Handle = Handle;
+        this.entities = new Map();
+        this.systems = new Map();
+        this.components = new Map();
+        this.sleepInterval = 1000 / 30;
+        this.intervalFunc = null;
+        this.running = false;
         this.isInit = false;
-    }
-    Start(interval) {
-        if (interval !== undefined) {
-            this.SleepInterval = interval;
-        }
-        this.SystemsInit();
-        this.IntervalFunc = setInterval(() => this.Update(), this.SleepInterval);
-        this.Running = true;
-    }
-    Stop() {
-        this.Running = false;
-    }
-    SystemsInit() {
-        Object.keys(this.Systems).forEach((sys) => {
-            if (!this.isInit)
-                this.Systems[sys].Init();
-            this.Systems[sys].LastTime = (new Date()).getTime();
-        });
-        this.isInit = true;
-    }
-    Update() {
-        Object.keys(this.Systems).forEach((sys) => {
-            this.Systems[sys].Update();
-        });
-        if (this.Running === false) {
-            clearInterval(this.IntervalFunc);
-        }
-    }
-    ManagerSet(manager) {
-        this.Manager = manager;
     }
     HandleGet() {
         return this.Handle;
     }
-    Entity(handle) {
-        return this.EntityCreate(handle);
+    ManagerSet(manager) {
+        this.manager = manager;
     }
-    System(sys) {
-        sys.ContainerSet(this);
-        this.Systems[sys.HandleGet()] = sys;
-        return sys;
+    Start(interval = this.sleepInterval) {
+        this.sleepInterval = interval;
+        this.SystemsInit();
+        this.intervalFunc = setInterval(() => this.Update(), this.sleepInterval);
+        this.running = true;
     }
-    EntityCreate(handle) {
-        let e;
-        if (handle === undefined) {
-            e = new Entity_1.Entity();
-            this.Entities[e.HandleGet()] = e;
-        }
-        else {
-            if (this.Entities[handle] === undefined) {
-                e = new Entity_1.Entity(handle);
-                this.Entities[e.HandleGet()] = e;
-            }
-            else
-                e = this.Entities[handle];
-        }
-        e.ContainerSet(this);
-        return e;
+    Stop() {
+        this.running = false;
+        if (this.intervalFunc)
+            clearInterval(this.intervalFunc);
     }
-    EntityDestroy(handle) {
-        Object.keys(this.Components).forEach((type) => {
-            delete this.Components[type][handle];
+    SystemsInit() {
+        this.systems.forEach((system) => {
+            if (!this.isInit)
+                system.Init();
         });
-        delete this.Entities[handle];
+        this.isInit = true;
     }
-    Component(c) {
-        if (this.Components[c.Type] === undefined) {
-            this.Components[c.Type] = {};
+    Update() {
+        this.systems.forEach((system) => system.Update());
+        if (!this.running && this.intervalFunc) {
+            clearInterval(this.intervalFunc);
         }
-        this.Components[c.Type][c.EntityHandle] = c;
-        return c;
+    }
+    EntityCreate(Handle) {
+        const entityHandle = Handle || (0, uuid_1.v4)();
+        let entity = this.entities.get(entityHandle);
+        if (!entity) {
+            entity = new Entity_1.Entity(entityHandle);
+            this.entities.set(entityHandle, entity);
+        }
+        entity.ContainerSet(this);
+        return entity;
+    }
+    EntityDestroy(Handle) {
+        this.components.forEach((componentMap) => {
+            componentMap.delete(Handle);
+        });
+        this.entities.delete(Handle);
+    }
+    SystemAdd(system) {
+        system.ContainerSet(this);
+        this.systems.set(system.HandleGet(), system);
+        return system;
+    }
+    ComponentAdd(component) {
+        var _a;
+        if (!this.components.has(component.Type)) {
+            this.components.set(component.Type, new Map());
+        }
+        (_a = this.components.get(component.Type)) === null || _a === void 0 ? void 0 : _a.set(component.EntityHandle, component);
+        return component;
     }
     ComponentsGet(types) {
         const results = {};
         types.forEach((type) => {
-            results[type] = this.Components[type];
-            if (results[type] === undefined) {
-                results[type] = {};
-            }
+            results[type] = this.components.get(type) || {};
         });
         return results;
     }
     Export() {
         const config = {
             Handle: this.Handle,
-            Entities: [],
-            Systems: []
+            Entities: Array.from(this.entities.values()).map((entity) => entity.Export()),
+            Systems: Array.from(this.systems.values()).map((system) => system.Export())
         };
-        Object.keys(this.Entities).forEach((e) => {
-            config.Entities.push(this.Entities[e].Export());
-        });
-        Object.keys(this.Systems).forEach((s) => {
-            config.Systems.push(this.Systems[s].Export());
-        });
         return config;
     }
 }
